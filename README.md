@@ -12,8 +12,9 @@ https://lablab.ai/t/whisper-api-flask-docker
 
 ## Docker
 
-- `docker build -t dataspects/whisper:1.0.0 .`
-- `docker run -p 5000:5000 dataspects/whisper:1.0.0`
+- `sudo docker build -t dataspects/whisper:1.0.0 .`
+- `sudo docker run -p 5000:5000 dataspects/whisper:1.0.0`
+- `sudo docker login && sudo docker push dataspects/whisper:1.0.0`
 
 ## Test
 
