@@ -6,9 +6,9 @@ https://lablab.ai/t/whisper-api-flask-docker
 
 - `~/whisper$ virtualenv /home/lex/.virtualenvs/whisper`
 - `~/whisper$ source ~/.virtualenvs/whisper/bin/activate`
-- `(solverion) ~/whisper$ pip install ...`
-- `(solverion) ~/whisper$ pip freeze > requirements.txt`
-- `(solverion) ~/whisper$ pip install -r requirements.txt`
+- `(whisper) ~/whisper$ pip install ...`
+- `(whisper) ~/whisper$ pip freeze > requirements.txt`
+- `(whisper) ~/whisper$ pip install -r requirements.txt`
 
 ## Docker
 
