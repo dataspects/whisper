@@ -19,3 +19,7 @@ https://lablab.ai/t/whisper-api-flask-docker
 ## Test
 
 - `curl -F "file=@/path/to/file" http://localhost:5000/whisper`
+
+## Converters
+
+- `ffmpeg -i *.m4a *.wav`
