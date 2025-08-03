@@ -2,6 +2,11 @@ from flask import Flask, abort, request
 from tempfile import NamedTemporaryFile
 import whisper
 import torch
+import librosa
+import soundfile as sf
+from pydub import AudioSegment
+import io
+
 
 # Check if NVIDIA GPU is available
 torch.cuda.is_available()
@@ -16,31 +21,39 @@ app = Flask(__name__)
 def hello():
     return "Whisper Hello World!"
 
-
 @app.route('/whisper', methods=['POST'])
 def handler():
     if not request.files:
-        # If the user didn't submit any files, return a 400 (Bad Request) error.
         abort(400)
 
-    # For each file, let's store the results in a list of dictionaries.
     results = []
 
-    # Loop over every file that the user submitted.
     for filename, handle in request.files.items():
-        # Create a temporary file.
-        # The location of the temporary file is available in `temp.name`.
-        temp = NamedTemporaryFile()
-        # Write the user's uploaded file to the temporary file.
-        # The file will get deleted when it drops out of scope.
-        handle.save(temp)
-        # Let's get the transcript of the temporary file.
-        result = model.transcribe(temp.name)
-        # Now we can store the result object for this file.
+        # Load uploaded file into AudioSegment (auto-handles .m4a, .mp3, etc.)
+        audio = AudioSegment.from_file(handle.stream)
+
+        # Export to raw audio in memory as WAV
+        wav_io = io.BytesIO()
+        audio.export(wav_io, format='wav')
+        wav_io.seek(0)
+
+        # Load into librosa for volume analysis and potential normalization
+        audio_data, sr = librosa.load(wav_io, sr=None, mono=True)
+        peak = max(abs(audio_data))
+        if peak < 0.8:
+            audio_data *= (0.8 / peak)
+
+        # Save normalized audio to a temporary WAV file
+        with NamedTemporaryFile(suffix=".wav", delete=False) as temp:
+            sf.write(temp.name, audio_data, sr)
+            temp.flush()
+
+            # Transcribe using Whisper
+            result = model.transcribe(temp.name)
+
         results.append({
             'filename': filename,
             'transcript': result['text'],
         })
 
-    # This will be automatically converted to JSON.
     return {'results': results}

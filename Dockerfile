@@ -4,6 +4,7 @@ WORKDIR /python-docker
 
 COPY requirements.txt requirements.txt
 RUN apt-get update && apt-get install git -y
+RUN apt-get install vim ffmpeg -y
 RUN pip3 install -r requirements.txt
 RUN pip3 install "git+https://github.com/openai/whisper.git" 
 RUN apt-get install -y ffmpeg
