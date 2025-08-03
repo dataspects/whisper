@@ -1,8 +1,6 @@
 from flask import Flask, abort, request
 from tempfile import NamedTemporaryFile
-import whisper
-import torch
-import librosa
+import whisper, torch, librosa, os
 import soundfile as sf
 from pydub import AudioSegment
 import io
@@ -40,8 +38,9 @@ def handler():
         # Load into librosa for volume analysis and potential normalization
         audio_data, sr = librosa.load(wav_io, sr=None, mono=True)
         peak = max(abs(audio_data))
-        if peak < 0.8:
-            audio_data *= (0.8 / peak)
+        min_peak = float(os.environ.get("MIN_AUDIO_PEAK", 0.8))
+        if peak < min_peak:
+            audio_data *= (min_peak / peak)
 
         # Save normalized audio to a temporary WAV file
         with NamedTemporaryFile(suffix=".wav", delete=False) as temp:
