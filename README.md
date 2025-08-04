@@ -2,9 +2,9 @@
 
 https://lablab.ai/t/whisper-api-flask-docker
 
-## ENVIRONMENT: Python environment and requirements
+# Develop
 
-Poetry
+- `poetry run python3 -m flask run --host 0.0.0.0 --port 5000`
 
 ## Docker
 

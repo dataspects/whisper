@@ -4,14 +4,18 @@ import whisper, torch, librosa, os
 import soundfile as sf
 from pydub import AudioSegment
 import io
-
+from rich.console import Console
+console = Console()
 
 # Check if NVIDIA GPU is available
 torch.cuda.is_available()
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
+# https://huggingface.co/spaces/openai/whisper/discussions/30
+
 # Load the Whisper model:
-model = whisper.load_model("base", device=DEVICE)
+# https://github.com/openai/whisper?tab=readme-ov-file#available-models-and-languages
+model = whisper.load_model("large", device=DEVICE)
 
 app = Flask(__name__)
 
@@ -27,6 +31,7 @@ def handler():
     results = []
 
     for filename, handle in request.files.items():
+        console.log(f"Processing file: {filename, handle}")
         # Load uploaded file into AudioSegment (auto-handles .m4a, .mp3, etc.)
         audio = AudioSegment.from_file(handle.stream)
 
