@@ -15,7 +15,7 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 # Load the Whisper model:
 # https://github.com/openai/whisper?tab=readme-ov-file#available-models-and-languages
-model = whisper.load_model("large", device=DEVICE)
+model = whisper.load_model("base", device=DEVICE)
 
 app = Flask(__name__)
 

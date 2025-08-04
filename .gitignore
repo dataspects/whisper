@@ -1,2 +1,18 @@
 *.mp4
 *.tar.gz
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Testing & tooling
+.mypy_cache/
+.pytest_cache/
+coverage.*
+*.cover
